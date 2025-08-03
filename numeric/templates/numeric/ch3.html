@@ -1,0 +1,65 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Section Search</title>
+    <link rel="stylesheet" href="{% static 'numeric/chs.css' %}">
+</head>
+<body>
+
+    <h1>Golden Section Search for Function Minimization and Maximization</h1>
+
+    <form method="POST" action="{% url 'calculate_ch3' %}" id="functionForm">
+        {% csrf_token %}
+        <label for="method">Choose Method:</label>
+        <select id="method" name="method" required>
+            <option value="max"{% if selected_method == 'max' %}selected{% endif %}>Maximum Point</option>
+            <option value="min"{% if selected_method == 'min' %}selected{% endif %}>Minimum Point</option>
+        </select>
+
+        <label for="function">Enter Function in terms of x (e.g., x**2 - 4):</label>
+        <input type="text" id="function" name="function" placeholder="x**2 - 4">
+
+        <label for="xl">Enter xl (lower bound):</label>
+        <input type="number" id="xl" name="xl" step="any">
+
+        <label for="xu">Enter xu (upper bound):</label>
+        <input type="number" id="xu" name="xu" step="any">
+
+        <label for="iterations">Enter Number of Iterations:</label>
+        <input type="number" id="iterations" name="iterations" value="10" min="1">
+
+        <button type="submit">Start Search</button>
+    </form>
+
+    {% if result %}
+    <h2>Result:</h2>
+    <p><strong>Result Value:</strong> {{ result }}</p>
+
+    <h2>Iterations:</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in iterations %}
+                <tr>
+                    {% for header in headers %}
+                      <td>{{ row|get_item:header }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+
+</body>
+</html>

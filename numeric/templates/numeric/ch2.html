@@ -1,0 +1,100 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix Solver</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'numeric/chs.css' %}">
+  <script>
+    // Load the selected method from local storage if available
+    function onMethodChange() {
+      const method = document.getElementById("method").value;
+      localStorage.setItem("matrixMethod", method);
+      showInputFields(method);
+    }
+
+    function showInputFields(method) {
+      const inputArea = document.getElementById("input-fields");
+      inputArea.innerHTML = "";
+
+      const matrixInput = document.createElement("textarea");
+      matrixInput.name = "matrix";
+      matrixInput.placeholder = "Enter augmented matrix (rows comma-separated)\nExample: 2 1 -1 8\n-3 -1 2 -11\n-2 1 2 -3";
+      matrixInput.rows = 6;
+      matrixInput.cols = 50;
+      inputArea.appendChild(matrixInput);
+    }
+  </script>
+</head>
+<body>
+  <h1>Matrix Solver</h1>
+  <form method="POST" action="{% url 'calculate_ch2' %}">
+    {% csrf_token %}
+    <label for="method">Choose a method:</label>
+    <select id="method" name="method" onchange="onMethodChange()">
+      <option value="gauss-elimination" {% if selected_method == 'gauss-elimination' %}selected{% endif %}>Gauss Elimination</option>
+      <option value="gauss-jordan" {% if selected_method == 'gauss-jordan' %}selected{% endif %}>Gauss-Jordan Elimination</option>
+      <option value="lu-decomposition"{% if selected_method == 'lu-decomposition' %}selected{% endif %}>LU Decomposition</option>
+      <option value="cramer"{% if selected_method == 'cramer' %}selected{% endif %}>Cramer's Rule</option>
+    </select>
+    
+    <label for="partial-pivoting">Use Partial Pivoting:</label>
+    <input type="checkbox" id="partial-pivoting" name="partial-pivoting" value="1" checked>
+    <div id="input-fields" style="margin-top: 20px;">
+        <textarea name="matrix" placeholder="Enter augmented matrix (rows comma-separated)
+        Example: 
+        2 1 -1 8
+        -3 -1 2 -11
+        -2 1 2 -3" rows="6" cols="50"></textarea>
+    </div>
+
+    <button type="submit">Solve</button>
+  </form>
+  <h1>Matrix Solver - Results</h1>
+
+    <h2>Selected Method: {{ method|title }}</h2>
+
+    <h3>Input Matrix:</h3>
+    <pre>
+        {% for row in matrix %}
+          {{ row }}
+        {% endfor %}
+    </pre>
+
+    {% if result %}
+        <h3>Solution:</h3>
+        <pre>
+        {% for value in result %}
+          x{{ forloop.counter }} = {{ value }}
+        {% endfor %}
+        </pre>
+        {% else %}
+          <p>No solution found.</p>
+        {% endif %}
+
+        {% if logs %}
+        <h3>Steps:</h3>
+        <table border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    {% for header in headers %}
+                      <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td colspan="2"><pre>{{ log }}</pre></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <br>
+    <a href="/ch2" style="margin-top:20px; display: inline-block;">Solve Another Matrix</a>
+    
+</body>
+</html>

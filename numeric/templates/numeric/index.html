@@ -1,0 +1,53 @@
+{% load static %}
+<html>
+  <head>
+    <title>numerical </title>
+    <meta content="project" >
+    <link rel="stylesheet" href="{% static 'numeric/stylesheet.css' %}">
+  </head>
+  <body>
+    <div class="firstpart">
+      <div class="textsec">
+        <h2>welcome</h2> 
+        <br>
+        <p>to our numerical project </p>
+      </div>
+    </div>
+
+    <div class="card-container">
+      <div class="card">
+        <img src="{% static 'numeric/imgs/17136518.png' %}" alt="Card 1"> 
+        <h3>  finding roots of polymonils </h3>
+  
+        <div class="links">
+          <a href="{% url 'ch1' %}?method=bisection">bisection</a>
+          <a href="{% url 'ch1' %}?method=false_position">false postion </a>
+          <a href="{% url 'ch1' %}?method=fixed_point"> simple fixed point</a>
+          <a href="{% url 'ch1' %}?method=newton_method"> newton</a>
+          <a href="{% url 'ch1' %}?method=secant"> secant</a>
+        </div>
+      </div>
+        
+      <div class="card">
+        <img src="{% static 'numeric/imgs/17136505.png' %}" alt="Card 2"> 
+        <h3>linear algebric equations </h3>
+        <div class="links">
+          <a href="{% url 'ch2' %}?method=gauss-elimination">gauss elimination</a>
+          <a href="{% url 'ch2' %}?method=gauss-jordan"> gauss-jorden</a>
+          <a href="{% url 'ch2' %}?method=lu-decomposition">lu decomposition</a>
+          <a href="{% url 'ch2' %}?method=cramer">cramer's rule </a>
+        </div>
+      </div>
+    
+      <div class="card">
+        <img src="{% static 'numeric/imgs/17136491.png' %}" alt="Card 3">
+        <h3>Golden Search</h3>
+        <div class="links">
+          <a href="{% url 'ch3' %}?method=max">Maximum point</a>
+          <a href="{% url 'ch3' %}?method=min">Minimum point</a>
+        </div>
+      </div>
+      
+    </div>
+  </body>
+</html>

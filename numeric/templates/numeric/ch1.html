@@ -1,0 +1,130 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Root Finding Solver</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'numeric/chs.css' %}">
+</head>
+<body>
+
+<h1>Numerical Root-Finding Solver</h1>
+
+<form method="POST" action="{% url 'calculate_ch1' %}">
+  {% csrf_token %}
+  <label for="method">Choose Method:</label>
+  <select name="method" id="method" required onchange="toggleExtraInputs()">
+    <option value="bisection" {% if selected_method == 'bisection' %}selected{% endif %}>Bisection</option>
+    <option value="false_position" {% if selected_method == 'false_position' %}selected{% endif %}>False Position</option>
+    <option value="fixed_point" {% if selected_method == 'fixed_point' %}selected{% endif %}>Fixed Point</option>
+    <option value="newton_method" {% if selected_method == 'newton_method' %}selected{% endif %}>Newton-Raphson</option>
+    <option value="secant" {% if selected_method == 'secant' %}selected{% endif %}>Secant</option>
+  </select>
+
+  <label for="function">Main Function (in terms of x):</label>
+  <input type="text" id="function" name="function" placeholder="e.g., x**3 - 2*x - 5" required value="{{ function }}">
+
+  <div id="extra-g-function" style="display: none;">
+    <label for="g_function">g(x) (for Fixed-Point):</label>
+    <input type="text" id="g_function" name="g_function" placeholder="e.g., (x**3 - 5)/2" value="{{ g_function }}">
+  </div>
+
+  <div id="extra-derivative" style="display: none;">
+    <label for="f_dash_function">f'(x) (for Newton-Raphson):</label>
+    <input type="text" id="f_dash_function" name="f_dash_function" placeholder="e.g., 3*x**2 - 2" value="{{ f_dash_function }}">
+  </div>
+
+  <label for="initial">Initial Guesses:</label>
+  <input type="text" name="x0" placeholder="Initial Value x₀" required value="{{ x0 }}">
+
+  <div id="x1-input">
+    <input type="text" name="x1" placeholder="Second Value x₁" value="{{ x1 }}">
+  </div>
+
+  <label for="stop_type">Stopping Criteria:</label>
+    <select id="stop_type" name="stop_type" required onchange="toggleInput()">
+        <option value="eps">Epsilon</option>
+        <option value="iter">Iterations</option>
+    </select>
+
+    <div id="epsilonInput">
+        <label for="epsilon_value">Epsilon:</label>
+        <input type="number" id="epsilon_value" name="epsilon_value" step="0.0001">
+    </div>
+
+    <div id="iterationInput" style="display: none;">
+        <label for="iteration_value">Iterations:</label>
+        <input type="number" id="iteration_value" name="iteration_value" min="1">
+    </div>
+
+  <button type="submit">Calculate Root</button>
+</form>
+
+<h2 style="text-align:center;">Method Iterations</h2>
+
+    {% if iterations %}
+    <table>
+        <thead>
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header|title }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in iterations %}
+                <tr>
+                  {% for header in headers %}
+                  <td>
+                      {% if row|get_item:header is number %}
+                          {{ row|get_item:header|floatformat:3 }}
+                      {% else %}
+                          {{ row|get_item:header }}
+                      {% endif %}
+                  </td>
+              {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p style="text-align:center; margin-top: 20px;">
+        <strong>Estimated Root:</strong> {{ root|floatformat:3 }}
+    </p>
+    {% else %}
+        <p style="text-align:center;">No iterations found. Invalid initial guesses or other invalid input. f(xl) and f(xu) must have opposite signs.</p>
+    {% endif %}
+<script>
+  function toggleExtraInputs() {
+    const method = document.getElementById("method").value;
+    const gFunctionInput = document.getElementById("extra-g-function");
+    const derivativeInput = document.getElementById("extra-derivative");
+
+    gFunctionInput.style.display = method === "fixed_point" ? "block" : "none";
+    derivativeInput.style.display = method === "newton_method" ? "block" : "none";
+  }
+
+  function toggleInput() {
+    var stopping = document.getElementById('stop_type').value;
+    var epsInput = document.getElementById('epsilonInput');
+    var iterInput = document.getElementById('iterationInput');
+
+    if (stopping === 'eps') {
+        epsInput.style.display = 'block';
+        iterInput.style.display = 'none';
+    } else if (stopping === 'iter') {
+        epsInput.style.display = 'none';
+        iterInput.style.display = 'block';
+    }
+  }
+
+  // Run on page load too (in case of reload)
+  document.addEventListener('DOMContentLoaded', toggleInput);
+  // Call on page load in case method is pre-selected
+  window.onload = toggleExtraInputs;
+</script>
+
+</body>
+</html>

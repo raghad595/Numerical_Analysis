@@ -1,0 +1,118 @@
+
+.firstpart{
+background-image: url(./imgs/metallic-typesetting-letters-with-copy-space_23-2149430840.avif);
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
+
+width: 100%;
+height: 100vh; 
+overflow: hidden;
+
+}
+
+
+.textsec{
+padding-top: 30%;
+    display: flex;
+    padding: 50px 30px;
+    align-items: left; 
+    justify-content:left; 
+    padding: 50px; 
+    color: white;
+    text-align: center;
+    flex-direction: column;
+    gap: 2rem;
+    animation: fadeIn 3s ease forwards;
+  padding: 0px 30px;
+    max-width: 400px;
+    font-size:  32px;
+font-family: 'Georgia';
+  
+
+}
+
+
+ .firstpart h2{
+    padding-top: 30px;
+    color: rgb(0, 0, 0);
+    animation: fadeIn 3s ease forwards;
+
+    
+}
+
+.firstpart p{
+    opacity: 0;
+    animation: fadeIn 3s ease forwards;
+    animation-delay: 1.2s; 
+font-size: 24px;
+    color: rgb(0, 0, 0);
+}
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+  .card-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: nowrap; 
+    padding: 2rem;
+   background-color: grey;
+  }
+  
+  .card {
+    background: #595555;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: calc(100% / 3);
+    text-align: center;
+    transition: transform 0.3s ease;
+    font-family:'Georgia' ;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card h3 {
+    margin: 1rem 0;
+  }
+  
+  .links {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+  }
+  
+  .links a {
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #007bff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .links a:hover {
+    background: #007bff;
+    color: white;
+  }
+  
